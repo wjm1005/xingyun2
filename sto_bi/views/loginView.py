@@ -20,7 +20,7 @@ def login(request):
     if request.method == "POST":
         user_id = request.POST.get('user_id')
         user_password = request.POST.get('user_password')
-
+        print(1)
         user=XyUsers.objects.values().get(id=user_id,user_password=user_password)
         print(user)
         if user:
