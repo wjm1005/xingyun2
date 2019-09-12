@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link href="/static/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/js/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">
+    <link href="/static/css/default.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div>
+    <table id="user_table" class="table-striped table-condensed table-hover" >
+    </table>
+
+</div>
+
+<script src="/static/js/jquery-2.1.1/jquery.js"></script>
+<script src="/static/js/jquery-2.1.1/jquery.min.js"></script>
+<script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="/static/js/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type='text/javascript'>
+
+    $(document).ready(function () {
+        userTable();
+    });
+    function userTable() {
+        $('#user_table').bootstrapTable('destroy');  //每次加载前，先销毁原来的表，相当于“刷新”
+        $('#user_table').bootstrapTable({
+
+            url: '/getUser/',
+            dataType: "json",
+            cache: false,   //是否启用 数据缓存
+            silent: true,    // 刷新服务器数据
+            showExport: false,
+            clickToSelect:true,//设置true 将在点击行时，自动选择rediobox 和 checkbox
+            columns:[{
+                checkbox: true,
+                formatter:function (value, row, index) {
+                        if (row["is_checkbox"] == '1') {
+                            return {
+                                checked: true
+                            };
+                        }else {
+                            return {
+                                checked: false
+                            };
+                        }
+                }
+                },{
+                field: 'user_name',
+                title: '姓名',
+                align: 'left',
+                halign: 'center'
+            },{
+                field: 'id',
+                title: '用户账户',
+                align: 'left',
+                halign: 'center'
+            }]
+        })
+
+    }
+</script>
+</body>
+</html>

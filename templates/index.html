@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+
+    <link rel="icon" href="/static/img/favicona.ico"/>
+    <link href="/static/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/js/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/default.css" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" type="text/css" href="/static/js/layui/css/layui.css" media="screen">
+    <link type="text/css" rel="stylesheet" href="/static/js/laydate/theme/default/laydate.css">
+    <link type="text/css" rel="stylesheet" href="/static/js/laydate/laydate.css"
+          id="LayDateSkin">
+    <link rel="stylesheet" type="text/css" media="all" href="/static/js/daterangepicker/daterangepicker-bs3.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/static/js/daterangepicker/daterangepicker-1.3.7.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-div">
+
+        <ul class="nav-ul">
+            <li class="nav-li">
+                <img src="/static/img/nav-home.png" style="width: 18px;height: 18px;">
+                <a href="">
+                    <span style="color:#fff;font-size: 14px;font-family:黑体 ">首页</span>
+                </a>
+            </li>
+            <li class="nav-li">
+                <img src="/static/img/nav-ybp.png" style="width: 18px;height: 18px;">
+                <a href="">
+                    <span style="color:#fff;font-size: 14px;font-family:黑体 ">仪表盘</span>
+                </a>
+            </li>
+            <li class="nav-li">
+                <img src="/static/img/nav-ztfx.png" style="width: 18px;height: 18px;">
+                <a href="">
+                    <span style="color:#fff;font-size: 14px;font-family:黑体 ">主题分析</span>
+                </a>
+            </li>
+            <li class="nav-li">
+                <img src="/static/img/nav-zzfw.png" style="width: 18px;height: 18px;">
+                <a href="">
+                    <span style="color:#fff;font-size: 14px;font-family:黑体 ">增值服务</span>
+                </a>
+            </li>
+            <li class="nav-li">
+                <img src="/static/img/nav-bjcx.png" style="width: 18px;height: 18px;">
+                <a href="">
+                    <span style="color:#fff;font-size: 14px;font-family:黑体 ">报表查询</span>
+                </a>
+            </li>
+            <li class="nav-li">
+                <img src="/static/img/nav-xtsz.png" style="width: 18px;height: 18px;">
+                <a href="">
+                    <span style="color:#fff;font-size: 14px;font-family:黑体 ">系统设置</span>
+                </a>
+            </li>
+
+        </ul>
+        <div style="margin-right: 10px;float:left">
+            <a href="/logout/">
+                <span>登出</span>
+            </a>
+        </div>
+    </div>
+
+
+</nav>
+
+
+<div style="padding: 0px;margin-top: 0px;height: 100%;width: 100%;position:relative;">
+    <div class="sidebar">
+        <ul class="nav">
+                <li role="presentation" id="bar-2">
+                    <a href="#docCollapse" class="nav-header collapsed" data-toggle="collapse" id="collapseParent" onclick="chevron_toggle()">Bar 2
+                        <span class="pull-right glyphicon glyphicon-chevron-down"></span></a>
+                    <ul id="docCollapse" class="nav nav-list collapse">
+                        <li><a href="#" onclick="addTab()">操作数据统计</a></li>
+                        <li><a href="#">Child Bar 2</a></li>
+                    </ul>
+                </li>
+</ul>
+
+    </div>
+    <div class="maincontent">
+
+        <div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+          <ul class="layui-tab-title" id="tcontent">
+            <li class="layui-this" lay-id="11">网站设置</li>
+            <li lay-id="22">用户管理</li>
+            <li lay-id="33">权限分配</li>
+            <li lay-id="44">商品管理</li>
+            <li lay-id="55">订单管理</li>
+          </ul>
+          <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">内容1</div>
+            <div class="layui-tab-item">内容2</div>
+            <div class="layui-tab-item">内容3</div>
+            <div class="layui-tab-item">内容4</div>
+            <div class="layui-tab-item">内容5</div>
+          </div>
+        </div>
+
+
+
+
+
+    </div>
+
+</div>
+<script src="/static/js/jquery-2.1.1/jquery.js"></script>
+<script src="/static/js/jquery-2.1.1/jquery.min.js"></script>
+<script src="/static/js/layer/layer.js"></script>
+
+<script src="/static/js/layui/layui.js"></script>
+
+<script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="/static/js/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<script type="text/javascript" src="/static/js/daterangepicker/moment.js"></script>
+<script type="text/javascript" src="/static/js/daterangepicker/daterangepicker-1.3.7.js"></script>
+<script type="text/javascript" src="/static/js/daterangepicker/daterangepicker.zh-CN.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/icheck/icheck.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.use('element', function(){
+  var $ = layui.jquery
+  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+  //触发事件
+  var active = {
+    tabAdd: function(){
+
+      //新增一个Tab项
+      element.tabAdd('demo', {
+        title: '新选项'+ (Math.random()*1000|0) //用于演示
+        ,content: "<iframe src='/templates/op_data/' style='width:100%; height:100%'></ifreame>"
+        ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+      })
+    }
+    ,tabDelete: function(othis){
+      //删除指定Tab项
+      element.tabDelete('demo', '44'); //删除：“商品管理”
+
+
+      othis.addClass('layui-btn-disabled');
+    }
+    ,tabChange: function(){
+      //切换到指定Tab项
+      element.tabChange('demo', '22'); //切换到：用户管理
+    }
+  };
+
+  $('.site-demo-active').on('click', function(){
+    var othis = $(this), type = othis.data('type');
+    active[type] ? active[type].call(this, othis) : '';
+  });
+  });
+
+    function addTab(){
+        var s = $('#tcontent li').attr('lay-id')
+        alert(s)
+        var element = layui.element;
+        element.tabAdd('demo', {
+        title: '操作数据统计'//用于演示
+        ,content: "<iframe src='/templates/op_data/' style='width:100%; height:900px'></ifreame>"
+        ,id: '66'
+      })
+    }
+
+
+    function chevron_toggle(){
+    $("#collapseParent").find("span").toggleClass("glyphicon-chevron-up");
+    $("#collapseParent").find("span").toggleClass("glyphicon-chevron-down");
+}
+</script>
+</body>
+</html>

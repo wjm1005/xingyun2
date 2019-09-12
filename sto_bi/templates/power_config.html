@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>权限配置</title>
+    <link href="/static/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/js/bootstrap-table/dist/bootstrap-table.css" rel="stylesheet">
+    <link href="/static/css/default.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .div_left{
+            width: 25%;
+            height: 100%;
+            background-color: #00FF00;
+            float: left;
+
+        }
+        .div_center{
+            width: 50%;
+            height: 100%;
+            background-color: #ffff00;
+            float: left;
+        }
+        .div_right{
+            width: 25%;
+            height: 100%;
+            background-color: #00FF00;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="div_left">
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">添加权限</button>
+        <table id="menu_level_table" class="table-striped table-condensed table-hover" >
+        </table>
+    </div>
+    <!-- --------------------------------------------------------- -->
+    <div class="div_center">
+        <button class="btn btn-primary btn-lg" onclick="upPower()">授权</button>
+        <table id="menu_table" class="table-striped table-condensed table-hover" >
+        </table>
+    </div>
+    <!-- --------------------------------------------------------- -->
+    <div class="div_right">
+        <table id="menu_user_table" class="table-striped table-condensed table-hover" >
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">新增</h4>
+            </div>
+            <div class="modal-body">
+                <strong>名称</strong>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="rolename" placeholder="请输入名称">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addrolename()">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+    </div>
+
+<script src="/static/js/jquery-2.1.1/jquery.js"></script>
+<script src="/static/js/jquery-2.1.1/jquery.min.js"></script>
+<script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="/static/js/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+<script type='text/javascript'>
+
+    $(document).ready(function () {
+        
+
+        menu_levelTable();
+        $("#menu_level_table").on("click-row.bs.table", function (row, $element) {
+            menu_table();
+            getUser();
+        })
+    });
+
+
+    function upPower() {
+        var rows = $('#menu_table').bootstrapTable('getAllSelections');
+        powerList = JSON.stringify(rows);
+        jQuery.getJSON('/upPower', {
+            "powerList": powerList
+        }, function (data) {
+            alert(data["success"])
+            menu_table()
+        }, "json")
+    }
+
+    function addrolename() {
+
+        jQuery.getJSON('/addPowerRole', {
+            "rolename": $("#rolename").val()
+        }, function (data) {
+            alert(data["success"])
+            menu_levelTable()
+            $("#myModal").modal('hide');
+        }, "json")
+    }
+
+    function getUser() {
+
+        $('#menu_user_table').bootstrapTable('destroy');  //每次加载前，先销毁原来的表，相当于“刷新”
+        $('#menu_user_table').bootstrapTable({
+
+            url: '/getPowerUser/',
+            dataType: "json",
+            cache: false,   //是否启用 数据缓存
+            pagination: true,  //是都分页
+            sidePageination: 'client',   //谁来分页，客户端：'client'，服务端：'server'
+            pageList: [10, 25, 50],
+            pageSize: 20,     //每页需要显示的数据量
+            silent: true,    // 刷新服务器数据
+            showExport: false,
+            clickToSelect:true,//设置true 将在点击行时，自动选择rediobox 和 checkbox
+            columns:[ {
+                    checkbox: true,
+                },{
+                field: 'id',
+                title: '编号',
+                align: 'left',
+                halign: 'center'
+            },{
+                field: 'user_name',
+                title: '姓名',
+                align: 'left',
+                halign: 'center'
+            }]
+        })
+    }
+
+    function menu_table() {
+        $('#menu_table').bootstrapTable('destroy');  //每次加载前，先销毁原来的表，相当于“刷新”
+        $('#menu_table').bootstrapTable({
+
+            url: '/getMenu/',
+            dataType: "json",
+            cache: false,   //是否启用 数据缓存
+            silent: true,    // 刷新服务器数据
+            showExport: false,
+            clickToSelect:true,//设置true 将在点击行时，自动选择rediobox 和 checkbox
+            columns:[{
+                checkbox: true,
+                formatter:function (value, row, index) {
+                        if (row["is_checkbox"] == '1') {
+                            return {
+                                checked: true
+                            };
+                        }else {
+                            return {
+                                checked: false
+                            };
+                        }
+                }
+                },{
+                field: 'menu_name',
+                title: '菜单',
+                align: 'left',
+                halign: 'center'
+            }]
+        })
+    }
+
+
+    function menu_levelTable() {
+        $('#menu_level_table').bootstrapTable('destroy');  //每次加载前，先销毁原来的表，相当于“刷新”
+        $('#menu_level_table').bootstrapTable({
+
+            url: '/getMenuLevel/',
+            dataType: "json",
+            cache: false,   //是否启用 数据缓存
+            pagination: true,  //是都分页
+            sidePageination: 'client',   //谁来分页，客户端：'client'，服务端：'server'
+            pageList: [10, 25, 50],
+            pageSize: 20,     //每页需要显示的数据量
+            silent: true,    // 刷新服务器数据
+            showExport: false,
+            clickToSelect:true,//设置true 将在点击行时，自动选择rediobox 和 checkbox
+            columns:[ {
+                    checkbox: true,
+                },{
+                field: 'level_id',
+                title: '编号',
+                align: 'left',
+                halign: 'center'
+            },{
+                field: 'level_name',
+                title: '名称',
+                align: 'left',
+                halign: 'center'
+            }]
+        })
+    }
+
+
+
+</script>
+</body>
+</html>
